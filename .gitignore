@@ -1,0 +1,10 @@
+node_modules/
+dist/
+public/assets/
+src-original/
+test-results/
+playwright-report/
+# Screenshot baselines render Macrospace's sprites; each machine records its own.
+tests/e2e/*-snapshots/
+.omc/
+.DS_Store

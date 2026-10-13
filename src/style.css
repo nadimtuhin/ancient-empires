@@ -1,0 +1,151 @@
+:root {
+  color-scheme: dark;
+  --panel: #1d2333;
+  --panel-edge: #c9a24a;
+  --text: #f2ead6;
+  --blue: #4f7fe0;
+  --red: #d8433b;
+  font-family: ui-monospace, 'SF Mono', Menlo, monospace;
+}
+
+* { box-sizing: border-box; }
+
+html, body {
+  margin: 0;
+  height: 100%;
+  background: #0d0f16;
+  color: var(--text);
+  overscroll-behavior: none;
+}
+
+#app {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  max-width: 720px;
+  margin: 0 auto;
+}
+
+.hud {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+  padding: 6px 10px;
+  background: var(--panel);
+  border-bottom: 2px solid var(--panel-edge);
+  font-size: 14px;
+}
+
+.hud .player-blue { color: var(--blue); }
+.hud .player-red { color: var(--red); }
+.hud .spacer { flex: 1; }
+
+.board {
+  flex: 1;
+  overflow: auto;
+  touch-action: manipulation;
+}
+
+.board canvas {
+  display: block;
+  image-rendering: pixelated;
+  cursor: pointer;
+}
+
+.info {
+  /* Fixed at event, tile and unit lines; longer text scrolls here instead of rescaling the map. */
+  height: calc(3 * 15px + 14px);
+  overflow-y: auto;
+  line-height: 15px;
+  padding: 6px 10px;
+  background: var(--panel);
+  border-top: 2px solid var(--panel-edge);
+  font-size: 13px;
+  white-space: pre-line;
+}
+
+button {
+  font: inherit;
+  color: var(--text);
+  background: #2c3550;
+  border: 2px solid var(--panel-edge);
+  border-radius: 4px;
+  padding: 6px 12px;
+  cursor: pointer;
+}
+
+button:hover, button:focus-visible { background: #3c4870; outline: none; }
+button:disabled { opacity: 0.4; cursor: default; }
+
+.overlay {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  background: rgb(0 0 0 / 0.6);
+  z-index: 10;
+}
+
+.dialog {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  min-width: 220px;
+  max-width: 90%;
+  max-height: 90%;
+  overflow: auto;
+  padding: 14px;
+  background: var(--panel);
+  border: 2px solid var(--panel-edge);
+  border-radius: 6px;
+}
+
+.dialog h2 { margin: 0 0 4px; font-size: 18px; text-align: center; }
+.dialog p { margin: 0; white-space: pre-line; line-height: 1.4; }
+
+.shop-item {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  text-align: left;
+}
+
+.action-menu {
+  position: absolute;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  z-index: 5;
+}
+
+.actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  /* Sized for a row of buttons, so the bar keeps its height when it fills. */
+  min-height: 49px;
+  padding: 6px 10px;
+  background: var(--panel);
+  border-top: 2px solid var(--panel-edge);
+}
+
+.main-menu {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  gap: 10px;
+  width: min(320px, 90%);
+  margin: 40px auto;
+}
+
+.main-menu h2 { margin: 0; text-align: center; }
+
+.splash, .portrait { image-rendering: pixelated; }
+.splash { width: 288px; height: 118px; align-self: center; }
+.portrait { width: 66px; height: 90px; flex: none; }
+
+.speech { display: flex; gap: 10px; align-items: flex-start; }
+
+.choice { display: flex; gap: 14px; border: 2px solid var(--panel-edge); border-radius: 4px; }
+
+.turn-badge { font-weight: bold; }

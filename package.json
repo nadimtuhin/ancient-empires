@@ -1,0 +1,27 @@
+{
+  "name": "ancient-empires-html5",
+  "private": true,
+  "version": "0.1.0",
+  "type": "module",
+  "scripts": {
+    "assets": "bun scripts/extract-assets.mjs",
+    "predev": "bun scripts/extract-assets.mjs --if-missing",
+    "dev": "vite",
+    "prebuild": "bun scripts/extract-assets.mjs --if-missing",
+    "build": "tsc --noEmit && vite build",
+    "preview": "vite preview",
+    "typecheck": "tsc --noEmit",
+    "lint": "bunx oxlint src tests scripts",
+    "test": "vitest run --maxWorkers=1",
+    "test:e2e": "playwright test",
+    "check": "bun run typecheck && bun run lint && bun run test && bun run test:e2e"
+  },
+  "devDependencies": {
+    "@playwright/test": "^1.64.0",
+    "@types/node": "^26.6.5",
+    "fflate": "^0.8.3",
+    "typescript": "^7.0.2",
+    "vite": "^8.3.4",
+    "vitest": "^5.0.4"
+  }
+}
