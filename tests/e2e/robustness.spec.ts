@@ -74,3 +74,17 @@ test('keyboard players can finish an order from the action bar', async ({ page }
   await expect(page.locator('.info')).toContainText('Blue King HP 100');
   await expect(page.locator('.info')).toContainText('(done)');
 });
+
+// Before anything is selected there is no cursor yet. Any arrow key must bring it up, not only the
+// ones that point into the map from (0,0).
+for (const key of ['ArrowUp', 'ArrowLeft']) {
+  test(`${key} shows the keyboard cursor at the start of a turn`, async ({ page }) => {
+    await page.goto('/?fast&seed=3');
+    await page.getByRole('button', { name: 'Skirmish' }).click();
+    await page.getByRole('button', { name: 'Island Cross' }).click();
+    await waitForHumanTurn(page, 1);
+    await expect(page.locator('.info')).not.toContainText('defence');
+    await page.keyboard.press(key);
+    await expect(page.locator('.info')).toContainText('defence');
+  });
+}

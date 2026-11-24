@@ -60,6 +60,26 @@ describe('readSave', () => {
     expect(readSave()).toBeNull();
   });
 
+  // Continue would crash on these, and the broken save would offer Continue again on every visit.
+  it.each([
+    ['a mission past the last one', (save: Record<string, unknown>) => (save.mission = 7)],
+    ['a negative mission', (save: Record<string, unknown>) => (save.mission = -1)],
+    ['a fractional mission', (save: Record<string, unknown>) => (save.mission = 1.5)],
+    ['an unknown player kind', (save: Record<string, unknown>) => (save.players = ['human', 'robot'])],
+    ['a single player', (save: Record<string, unknown>) => (save.players = ['human'])],
+    ['a skirmish without a map name', (save: Record<string, unknown>) => Object.assign(save, { mission: null, map: 7 })],
+    ['a current team other than 0 or 1', (save: Record<string, unknown>) => ((save.state as { current: number }).current = 2)],
+    ['gold that is not a pair of numbers', (save: Record<string, unknown>) => ((save.state as { gold: unknown }).gold = 5)],
+  ])('returns null for %s', (_, patch) => {
+    stored(patch);
+    expect(readSave()).toBeNull();
+  });
+
+  it('accepts a skirmish save (mission null)', () => {
+    stored((save) => Object.assign(save, { mission: null, map: 's0' }));
+    expect(readSave()?.mission).toBeNull();
+  });
+
   it('returns null when state is missing', () => {
     stored((save) => delete save.state);
     expect(readSave()).toBeNull();

@@ -257,8 +257,9 @@ export class Session {
     };
     const step = steps[event.key];
     if (step) {
-      const from = this.view.cursor ?? { x: 0, y: 0 };
-      const to = { x: from.x + step.x, y: from.y + step.y };
+      // With no cursor yet, any arrow brings it up in the top-left corner.
+      const from = this.view.cursor;
+      const to = from ? { x: from.x + step.x, y: from.y + step.y } : { x: 0, y: 0 };
       if (inBounds(this.state, to.x, to.y)) this.view.cursor = to;
       this.renderInfo();
       this.invalidate();

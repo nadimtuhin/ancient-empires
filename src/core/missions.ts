@@ -3,7 +3,7 @@
 import { parseMap } from './formats';
 import { buildingTileFor, Terrain, UnitType, type Team } from './rules';
 import {
-  createGame, isAlive, kingOf, ownerAt, spawnUnit, terrainAt, unitAt, type GameState, type Unit,
+  createGame, distance, inBounds, isAlive, kingOf, ownerAt, spawnUnit, terrainAt, unitAt, type GameState, type Unit,
 } from './state';
 
 export const MISSION_COUNT = 7;
@@ -48,8 +48,10 @@ export class MissionApi {
     for (const textIndex of textIndexes) this.dialogue.push({ speaker, textIndex });
   }
 
+  /** Places a scripted unit on (x,y), or on the nearest free tile if someone already stands there. */
   spawn(type: UnitType, team: Team, x: number, y: number): Unit {
-    const unit = spawnUnit(this.state, type, team, x, y);
+    const at = nearestFreeTile(this.state, x, y);
+    const unit = spawnUnit(this.state, type, team, at.x, at.y);
     unit.status = 'done';
     return unit;
   }
@@ -74,6 +76,18 @@ export class MissionApi {
   owns(team: Team, x: number, y: number): boolean {
     return ownerAt(this.state, x, y) === team;
   }
+}
+
+/** (x,y) itself when free, else the closest free tile by walking distance, scanning rows top to bottom. */
+function nearestFreeTile(state: GameState, x: number, y: number): { x: number; y: number } {
+  for (let range = 0; range < state.width + state.height; range++) {
+    for (let ty = y - range; ty <= y + range; ty++) {
+      for (let tx = x - range; tx <= x + range; tx++) {
+        if (distance(x, y, tx, ty) === range && inBounds(state, tx, ty) && !unitAt(state, tx, ty)) return { x: tx, y: ty };
+      }
+    }
+  }
+  return { x, y };
 }
 
 export interface Mission {

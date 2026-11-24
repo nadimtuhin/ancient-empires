@@ -12,6 +12,7 @@
     "preview": "vite preview",
     "typecheck": "tsc --noEmit",
     "lint": "bunx oxlint src tests scripts",
+    "pretest": "bun scripts/extract-assets.mjs --if-missing",
     "test": "vitest run --maxWorkers=1",
     "test:e2e": "playwright test",
     "check": "bun run typecheck && bun run lint && bun run test && bun run test:e2e"

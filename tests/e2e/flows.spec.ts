@@ -16,6 +16,9 @@ async function hoverTile(page: Page, x: number, y: number): Promise<void> {
 const corruptSaves = {
   'malformed JSON': '{oops',
   'an unsupported version': JSON.stringify({ version: 2, mission: null, map: 's0', firedBeats: [], players: ['human', 'cpu'], state: {} }),
+  'a mission that does not exist': JSON.stringify({
+    version: 1, mission: 7, map: 'm7', firedBeats: [], players: ['human', 'cpu'], state: freshGame('s0', 1000),
+  }),
 };
 
 for (const [description, raw] of Object.entries(corruptSaves)) {
